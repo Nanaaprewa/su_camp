@@ -14,5 +14,16 @@ const User = new Schema({
     type: String,
     required: true,
     enum: ['m', 'male', 'f', 'female']
-  }
+  },
+  education: {
+    type: String,
+    enum: ['bs', 'lp', 'up', 'jhs', 'shs', 'coll', 'none']
+  },
+  hobbies: [
+    {
+      type: String
+    }
+  ]
 });
+
+module.exports = mongoose.model('User', User);
