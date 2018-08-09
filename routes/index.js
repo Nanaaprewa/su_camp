@@ -6,6 +6,23 @@ const debug = require('debug')('su-camp:index.js');
 const { waterfall } = require('async');
 
 /* GET home page. */
+
+router.get('/user', (req, res) => {
+  User.findById(req.query.user_id)
+    .lean()
+    .populate({
+      path: 'house',
+      select: '-occupants'
+    })
+    .exec((err, user) => {
+      if (err) {
+        debug(err);
+        return res.send(err);
+      }
+      res.json(user);
+    });
+});
+
 router.post('/user', (req, res) => {
   waterfall(
     [
