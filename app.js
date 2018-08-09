@@ -11,6 +11,7 @@ mongoose.connect(
   {
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 5000
+    // useNewUrlParser: true
   }
 );
 const db = mongoose.connection;
@@ -41,4 +42,11 @@ db.on('disconnected', () => {
 
 db.on('disconnected', err => {
   debug(`Mongoose default connection error: ${err}`);
+});
+
+process.on('SIGINT', function() {
+  db.close(function() {
+    debug('Mongoose default connection disconnected on app termination');
+    process.exit(0);
+  });
 });
