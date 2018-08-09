@@ -22,7 +22,6 @@ router.get('/user', (req, res) => {
       res.json(user);
     });
 });
-
 router.post('/user', (req, res) => {
   waterfall(
     [
@@ -78,6 +77,37 @@ router.post('/user', (req, res) => {
       res.json(user);
     }
   );
+});
+
+router.patch('/users', (req, res) => {
+  let query = {};
+  query[req.body.target] = req.body.content;
+  User.findByIdAndUpdate(req.body._id, {
+    $set: query
+  })
+    .lean()
+    .exec((err, user) => {
+      if (err) {
+        debug(err);
+        return res.status(500).end();
+      }
+
+      res.status(204).end();
+    });
+});
+
+router.get('/house', (req, res) => {
+  debug(req.query);
+  House.findById(req.query.house_id)
+    .lean()
+    .populate({
+      path: 'occupants',
+      select: '-house'
+    })
+    .exec((err, house) => {
+      if (err) return res.status(500).send(err);
+      res.json(house);
+    });
 });
 
 router.post('/house', (req, res) => {
