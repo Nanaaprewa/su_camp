@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const debug = require('debug')('su-camp:app.js');
 var mongoose = require('mongoose');
+var cors = require('cors');
+
 mongoose.Promise = require('bluebird');
 mongoose.connect(
   process.env.MONGODB_URI,
@@ -20,7 +22,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

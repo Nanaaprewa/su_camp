@@ -110,6 +110,17 @@ router.get('/house', (req, res) => {
     });
 });
 
+router.get('/houses', (req, res) => {
+  House.find()
+    .lean()
+    .populate({ path: 'occupants', select: '-house' })
+    .exec((err, houses) => {
+      if (err) return res.status(500).send(err);
+      debug(houses);
+      res.json(houses);
+    });
+});
+
 router.post('/house', (req, res) => {
   const newHouse = new House(req.body);
   newHouse.save((err, house) => {
